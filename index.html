@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flappy Bird</title>
+    <link rel="stylesheet" href="css/flappybird.css">
+    <script src="js/flappybird.js"></script>
+    <style>
+        body {
+            font-family:'Courier New', Courier, monospace;
+            text-align: center;
+        }
+
+        #board {
+            border: 5px solid black;
+        }
+
+        #menu {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            height: 640px; /* Ajuster la hauteur en fonction du contenu */
+            width: 360px; /* Largeur fixe du menu */
+            padding: 20px;
+            border-radius: 10px;
+            background-image: url("/png/flabbyBirdMovingBackGround.gif");
+            background-size: cover;
+            border: 5px solid black;
+        }
+
+        #menu select, #menu button {
+            font-size: 20px;
+            padding: 10px;
+            margin: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div id="menu">
+    <div>
+        <h1>Choisir la difficulté</h1>
+        <select id="difficulty">
+            <option value="easy">Facile</option>
+            <option value="medium">Moyen</option>
+            <option value="hard">Difficile</option>
+        </select>
+        <br>
+        <button onclick="startGame()">Démarrer le jeu</button>
+    </div>
+</div>
+<canvas id="board" style="display:none;"></canvas>
+</body>
+</html>
