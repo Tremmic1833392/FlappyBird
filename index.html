@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flappy Bird</title>
     <link rel="stylesheet" href="css/flappybird.css">
-    <script src="js/flappybird.js"></script>
+    <script src="js/flappybird.js" defer></script>
     <style>
         body {
             font-family:'Courier New', Courier, monospace;
@@ -21,8 +21,8 @@
             justify-content: center;
             align-items: center;
             position: absolute;
-            height: 640px; /* Ajuster la hauteur en fonction du contenu */
-            width: 360px; /* Largeur fixe du menu */
+            height: 640px;
+            width: 360px;
             padding: 20px;
             border-radius: 10px;
             background-image: url("/png/flabbyBirdMovingBackGround.gif");
@@ -49,8 +49,18 @@
         </select>
         <br>
         <button onclick="startGame()">Démarrer le jeu</button>
+        <br>
+        <button onclick="showLeaderboard()">Voir le classement</button> <!-- Nouveau bouton -->
     </div>
 </div>
+
 <canvas id="board" style="display:none;"></canvas>
+
+<div id="leaderboard" style="display:none;">
+    <h1>Classement</h1>
+    <ul id="scores"></ul>
+    <button onclick="clearScores()">Réinitialiser le classement</button>
+    <button onclick="backToMenu()">Retour</button>
+</div>
 </body>
 </html>
