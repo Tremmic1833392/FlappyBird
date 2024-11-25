@@ -1,5 +1,6 @@
+/* Styles généraux */
 body {
-    font-family:'Courier New', Courier, monospace;
+    font-family: 'Courier New', Courier, monospace;
     text-align: center;
     margin: 0;
     height: 100vh;
@@ -8,7 +9,63 @@ body {
     align-items: center;
 }
 
+/* Canvas du jeu */
 #board {
     background-image: url("/png/flabbyBirdMovingBackGround.gif");
+    background-size: cover;
     border-radius: 10px;
+    border: 5px solid black;
+}
+
+/* Menu principal */
+#menu {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+}
+
+#menu button {
+    font-size: 20px;
+    padding: 10px;
+    margin: 10px;
+    cursor: pointer;
+}
+
+#menu select {
+    font-size: 20px;
+    padding: 5px;
+    margin-bottom: 10px;
+}
+
+/* Leaderboard */
+#leaderboard {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    background: rgba(0, 0, 0, 0.8); /* Transparence pour voir le menu derrière */
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 300px;
+    z-index: 10; /* Superposé au menu */
+}
+
+#leaderboard ul {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+}
+
+#leaderboard li {
+    font-size: 20px;
+    margin: 5px 0;
+}
+
+#leaderboard button {
+    font-size: 18px;
+    padding: 10px 15px;
+    margin-top: 10px;
+    cursor: pointer;
 }
