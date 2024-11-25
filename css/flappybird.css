@@ -1,4 +1,4 @@
-/* Styles généraux */
+/* Corps de la page */
 body {
     font-family: 'Courier New', Courier, monospace;
     text-align: center;
@@ -7,34 +7,55 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: #87CEEB; /* Bleu clair pour un fond agrÃ©able */
+    color: white; /* Texte blanc pour le contraste */
 }
 
 /* Canvas du jeu */
 #board {
     background-image: url("/png/flabbyBirdMovingBackGround.gif");
-    background-size: cover;
     border-radius: 10px;
-    border: 5px solid black;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Ombre pour le canvas */
 }
 
 /* Menu principal */
 #menu {
-    position: relative;
-    z-index: 1;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.8); /* Fond semi-transparent */
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    width: 300px;
     text-align: center;
 }
 
-#menu button {
-    font-size: 20px;
-    padding: 10px;
-    margin: 10px;
-    cursor: pointer;
+#menu h1 {
+    margin: 0;
+    font-size: 24px;
+    text-decoration: underline;
 }
 
-#menu select {
-    font-size: 20px;
-    padding: 5px;
-    margin-bottom: 10px;
+#menu select,
+#menu button {
+    font-size: 18px;
+    padding: 10px;
+    margin: 10px 0;
+    cursor: pointer;
+    background-color: #4CAF50; /* Vert */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease;
+}
+
+#menu button:hover,
+#menu select:hover {
+    background-color: #45a049; /* Couleur plus sombre au survol */
 }
 
 /* Leaderboard */
@@ -43,29 +64,49 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    text-align: center;
-    background: rgba(0, 0, 0, 0.8); /* Transparence pour voir le menu derrière */
+    background-color: rgba(0, 0, 0, 0.9); /* Fond semi-transparent plus sombre */
     color: white;
     padding: 20px;
     border-radius: 10px;
-    width: 300px;
-    z-index: 10; /* Superposé au menu */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    width: 320px;
+    text-align: center;
+    z-index: 10; /* Assurez-vous qu'il est toujours visible */
 }
 
-#leaderboard ul {
-    list-style: none;
+#leaderboard h2 {
+    margin: 0;
+    font-size: 26px;
+    text-decoration: underline;
+}
+
+#leaderboard-list {
+    list-style-type: none;
     padding: 0;
-    margin: 20px 0;
-}
-
-#leaderboard li {
-    font-size: 20px;
-    margin: 5px 0;
-}
-
-#leaderboard button {
+    margin: 15px 0;
     font-size: 18px;
-    padding: 10px 15px;
-    margin-top: 10px;
-    cursor: pointer;
 }
+
+#leaderboard-list li {
+    margin: 8px 0;
+    font-weight: bold;
+}
+
+/* Boutons universels */
+button {
+    font-size: 18px;
+    padding: 8px 12px;
+    margin: 5px;
+    cursor: pointer;
+    background-color: #4CAF50; /* Vert */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+

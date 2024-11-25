@@ -1,20 +1,20 @@
 //board
 let board;
-let boardWidth = 360;
-let boardHeight = 640;
+let boardWidth = 360;  // Largeur du background
+let boardHeight = 640; // Hauteur du background
 let context;
 
-// Difficulter du jeu
+// Difficulter du jeux
 let gameDifficulty;
 
 //bird
-let birdWidth = 34;
+let birdWidth = 34; //width/height ratio = 408/228 = 17/12
 let birdHeight = 24;
-let birdX = boardWidth / 8;
-let birdY = boardHeight / 2;
-let birdImg;
+let birdX = boardWidth / 8; // Largeur pour qu'il soit au début
+let birdY = boardHeight / 2; // Hauter pour qu'il soit au milieu
+let birdImg; // Image du bird
 
-let bird = {
+let bird = { // Creation du bird plus "constructeur"
     x: birdX,
     y: birdY,
     width: birdWidth,
@@ -23,7 +23,7 @@ let bird = {
 
 //pipes
 let pipeArray = [];
-let pipeWidth = 64;
+let pipeWidth = 64; //width/height ratio = 384/3072 = 1/8
 let pipeHeight = 512;
 let pipeX = boardWidth;
 let pipeY = 0;
@@ -32,17 +32,17 @@ let topPipeImg;
 let bottomPipeImg;
 
 //physics de base
-let velocityX = -2;
+let velocityX = -2; //pipes moving left speed
 let gravity = 0.4;
-let velocityY = 0;
+let velocityY = 0; //bird jump speed
 
 let gameOver = false;
 let score = 0;
 
-// Variable pour éviter les sauvegardes multiples
-let scoreSaved = false;
+// leaderboard
+let leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [];
+let scoreSaved = false; // Nouveau : empêche les prompts en boucle
 
-// Fonction pour changer les paramètres selon la difficulté
 function modificationDesParametre(difficulty) {
     switch (difficulty) {
         case 'easy':
@@ -63,55 +63,14 @@ function modificationDesParametre(difficulty) {
     }
 }
 
-// Fonction pour sauvegarder le score dans le local storage
-function saveScore(currentScore) {
-    let bestScore = JSON.parse(localStorage.getItem('bestScore')) || 0;
-
-    if (currentScore > bestScore) {
-        localStorage.setItem('bestScore', JSON.stringify(currentScore));
-        console.log("Nouveau meilleur score :", currentScore); // Debug
-    } else {
-        console.log("Score actuel inférieur au meilleur score :", currentScore); // Debug
-    }
-}
-
-
-
-// Fonction pour afficher le leaderboard
-function showLeaderboard() {
-    const leaderboard = document.getElementById('leaderboard');
-    const scoresList = document.getElementById('scores');
-
-    let bestScore = JSON.parse(localStorage.getItem('bestScore')) || 0;
-
-    if (bestScore === 0) {
-        scoresList.innerHTML = '<li>Aucun score enregistré</li>';
-    } else {
-        scoresList.innerHTML = `<li>Meilleur score : ${bestScore}</li>`;
-    }
-
-    leaderboard.style.display = 'block';
-    document.getElementById('board').style.display = 'none';
-}
-
-
-
-
-// Fonction pour revenir au menu principal
-function backToMenu() {
-    document.getElementById('leaderboard').style.display = 'none';
-    const menu = document.getElementById('menu');
-    menu.style.opacity = '1';
-    menu.style.pointerEvents = 'auto';
-}
-
-// Fonction pour démarrer le jeu
 function startGame() {
     document.getElementById('menu').style.display = 'none';
     document.getElementById('board').style.display = 'block';
 
+    // Récupérer la difficulté sélectionnée
     gameDifficulty = document.getElementById('difficulty').value;
 
+    // Setter la difficulé
     modificationDesParametre(gameDifficulty);
 
     board = document.getElementById("board");
@@ -136,21 +95,19 @@ function startGame() {
     document.addEventListener("keydown", moveBird);
 }
 
-// Fonction pour mettre à jour l'état du jeu
 function update() {
     requestAnimationFrame(update);
     if (gameOver) {
-        if (!scoreSaved) { // Sauvegarder uniquement si cela n'a pas été fait
-            saveScore(score); // Appeler la fonction pour enregistrer le score
-            scoreSaved = true; // Marquer comme sauvegardé
-            document.getElementById('gameOverScreen').style.display = 'block';
-            document.getElementById('board').style.display = 'none';
+        if (!scoreSaved) {
+            saveScore(score); // Sauvegarde le score une seule fois
+            scoreSaved = true; // Empêche le prompt de se répéter
         }
+        context.fillText("GAME OVER", 45, 320);
         return;
     }
-
     context.clearRect(0, 0, board.width, board.height);
 
+    //bird
     velocityY += gravity;
     bird.y = Math.max(bird.y + velocityY, 0);
     context.drawImage(birdImg, bird.x, bird.y, bird.width, bird.height);
@@ -159,6 +116,7 @@ function update() {
         gameOver = true;
     }
 
+    //pipes
     for (let i = 0; i < pipeArray.length; i++) {
         let pipe = pipeArray[i];
         pipe.x += velocityX;
@@ -174,17 +132,17 @@ function update() {
         }
     }
 
-
+    //clear pipes
     while (pipeArray.length > 0 && pipeArray[0].x < -pipeWidth) {
         pipeArray.shift();
     }
 
+    //score
     context.fillStyle = "white";
     context.font = "45px sans-serif";
     context.fillText(score, 5, 45);
 }
 
-// Fonction pour générer les tuyaux
 function placePipes() {
     if (gameOver) {
         return;
@@ -214,7 +172,6 @@ function placePipes() {
     pipeArray.push(bottomPipe);
 }
 
-// Fonction pour déplacer l'oiseau
 function moveBird(e) {
     if (e.code == "Space" || e.code == "ArrowUp" || e.code == "KeyX") {
         velocityY = -6;
@@ -224,23 +181,82 @@ function moveBird(e) {
             pipeArray = [];
             score = 0;
             gameOver = false;
+            scoreSaved = false; // Réinitialiser l'indicateur
         }
     }
 }
 
-
-function clearScores() {
-    localStorage.removeItem('bestScore'); // Supprimer le meilleur score
-    alert('Le classement a été réinitialisé.');
-    showLeaderboard();
-}
-
-
-
-// Fonction pour détecter les collisions
 function detectCollision(a, b) {
     return a.x < b.x + b.width &&
         a.x + a.width > b.x &&
         a.y < b.y + b.height &&
         a.y + a.height > b.y;
+}
+
+// leaderboard
+function saveScore(score) {
+    if (scoreSaved) return; // Empêche d'exécuter plusieurs fois la sauvegarde
+
+    let playerName = prompt("Entrez votre nom pour le leaderboard :");
+
+    if (playerName) {
+        let replaced = false;
+
+        // Parcourir le leaderboard en commençant par la 10ème position
+        for (let i = leaderboard.length - 1; i >= 0; i--) {
+            if (score > leaderboard[i].score) {
+                leaderboard[i] = { name: playerName, score: score }; // Remplacer score et nom
+                replaced = true;
+                break; // Arrêter la boucle une fois remplacé
+            }
+        }
+
+        // Si le leaderboard contient moins de 10 scores, ajouter directement
+        if (!replaced && leaderboard.length < 10) {
+            leaderboard.push({ name: playerName, score: score });
+        }
+
+        // Trier les scores du meilleur au moins bon
+        leaderboard.sort((a, b) => b.score - a.score);
+
+        // Sauvegarder dans le stockage local
+        localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
+
+        // Afficher le leaderboard
+        displayLeaderboard();
+
+        scoreSaved = true; // Empêche les prompts multiples
+    }
+}
+
+
+
+function returnToMenu() {
+    window.location.reload();
+}
+
+function displayLeaderboard() {
+    const leaderboardDiv = document.getElementById('leaderboard');
+    const leaderboardList = document.getElementById('leaderboard-list');
+
+    leaderboardList.innerHTML = ""; // Efface l'ancien contenu
+    leaderboard.forEach(entry => {
+        const listItem = document.createElement('li');
+        listItem.textContent = `${entry.name}: ${entry.score}`;
+        leaderboardList.appendChild(listItem);
+    });
+
+    leaderboardDiv.style.display = 'block'; // Afficher le leaderboard
+}
+
+
+function restartGame() {
+    document.getElementById('leaderboard').style.display = 'none';
+    document.getElementById('board').style.display = 'block';
+
+    gameOver = false;
+    bird.y = birdY;
+    pipeArray = [];
+    score = 0;
+    scoreSaved = false;
 }

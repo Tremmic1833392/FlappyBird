@@ -50,17 +50,17 @@
         <br>
         <button onclick="startGame()">Démarrer le jeu</button>
         <br>
-        <button onclick="showLeaderboard()">Voir le classement</button> <!-- Nouveau bouton -->
+        <button onclick="displayLeaderboard()">Voir le classement</button> <!-- Nouveau bouton -->
     </div>
 </div>
 
 <canvas id="board" style="display:none;"></canvas>
 
 <div id="leaderboard" style="display:none;">
-    <h1>Classement</h1>
-    <ul id="scores"></ul>
-    <button onclick="clearScores()">Réinitialiser le classement</button>
-    <button onclick="backToMenu()">Retour</button>
+    <h2>Leaderboard</h2>
+    <ol id="leaderboard-list"></ol>
+    <button onclick="restartGame()">Rejouer</button>
+    <button onclick="returnToMenu()">Retour au menu</button> <!-- Nouveau bouton -->
 </div>
 </body>
 </html>
