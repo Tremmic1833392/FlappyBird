@@ -1,9 +1,11 @@
-
+// Coins
 let coins = []; // Stockage des pièces
 let coinImg;    // Image de la pièce
 let coinWidth = 20;
 let coinHeight = 20;
 let playerMoney = 0; // Initialiser l'argent du joueur
+coinImg = new Image();
+coinImg.src = "png/Coin.png.png";
 
 //board
 let board;
@@ -25,7 +27,7 @@ document.getElementById("theme").addEventListener("change", choixDuTheme);
 let birdWidth = 34;
 let birdHeight = 24;
 let birdX = boardWidth / 8; // Largeur pour qu'il soit au début
-let birdY = boardHeight / 2; // Hauter pour qu'il soit au milieu
+let birdY = boardHeight / 2; // Hauteur pour qu'il soit au milieu
 let birdImg = new Image();
 birdImg.src = "png/flappybird.png";
 
@@ -42,6 +44,8 @@ let pipeWidth = 64;
 let pipeHeight = 512;
 let pipeX = boardWidth;
 let pipeY = 0;
+let espaceAudessus = 0;
+let espaceEnDessous = 0;
 
 let topPipeImg = new Image();
 topPipeImg.src = "png/toppipe.png";
@@ -91,9 +95,7 @@ function startGame() {
     requestAnimationFrame(update);
     setInterval(placePipes, 1500); // 1500 = 1.5 seconde --> un tuyaux tous les 1.5 sec
     document.addEventListener("keydown", moveBird);
-    coinImg = new Image();
-    coinImg.src = "png/Coin.png.png";
-    setInterval(placeCoin, 2000); // Génère une pièce toutes les 2 secondes
+    setInterval(placeCoin, 1500); // Génère une pièce toutes les 2 secondes
 
 }
 
@@ -110,10 +112,8 @@ function update() {
     context.clearRect(0, 0, board.width, board.height);
 
     //bird
-    if (gameStarted) {
-        velocityY += gravity;
-        bird.y = Math.max(bird.y + velocityY, 0);
-    }
+    velocityY += gravity;
+    bird.y = Math.max(bird.y + velocityY, 0);
     context.drawImage(birdImg, bird.x, bird.y, bird.width, bird.height);
 
     if (bird.y > board.height) {
@@ -148,6 +148,7 @@ function update() {
     context.fillText(score, 5, 45);
     context.fillText("Gain: ", 5, 90); // Affichage du gain
     context.fillText(playerMoney, 120, 90); // Affiche la valeur de l'argent du joueur
+
     // Coins
     for (let i = 0; i < coins.length; i++) {
         let coin = coins[i];
@@ -161,12 +162,10 @@ function update() {
             i--; // Ajustez l'index après suppression
         }
     }
-
-// Supprimer les pièces hors écran
+    // Supprimer les pièces hors écran
     while (coins.length > 0 && coins[0].x < -coinWidth) {
         coins.shift();
     }
-
 }
 
 function placePipes() {
@@ -195,16 +194,16 @@ function placePipes() {
         height: pipeHeight,
         passed: false
     }
+    espaceAudessus = topPipe.y + topPipe.height; // Le bas du tuyau supérieur
+    espaceEnDessous = bottomPipe.y;
     pipeArray.push(bottomPipe);
 }
 
 function moveBird(e) {
-    if (e.code === "ArrowUp" )/*|| e.code === "ArrowUp" || e.code === "KeyX") {
+    if (e.code === "Space" || e.code === "ArrowUp" || e.code === "KeyX") {
         velocityY = -6;
-*/
-    {bird.y = Math.max(bird.y - 10, 0);}
-    else if (e.code==="ArrowDown")
-    {bird.y = Math.min(bird.y + 10, boardHeight - bird.height);}
+        //bird.y = Math.max(bird.y - 10, 0);
+
         if (gameOver && (e.code === "Space" || e.code === "KeyX")) {
             bird.y = birdY;
             pipeArray = [];
@@ -213,6 +212,7 @@ function moveBird(e) {
             scoreSaved = false; // Réinitialiser l'indicateur
 
         }
+    }
 
 }
 
@@ -327,7 +327,7 @@ function restartGame() {
 let gameStarted = false;
 function placeCoin() {
     if (gameOver) return;
-    let randomY = Math.random() * (boardHeight - coinHeight); // Position Y aléatoire
+    let randomY = Math.random() * (espaceEnDessous - espaceAudessus) + espaceAudessus; // Position Y aléatoire
     let coin = {
         x: boardWidth, // Toujours à l'extérieur à droite du board
         y: randomY,
