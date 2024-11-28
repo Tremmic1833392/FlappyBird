@@ -14,6 +14,7 @@ body {
 
 /* Canvas du jeu */
 #board {
+    filter: grayscale(0%); /* Pour changer le theme en noir et blanc*/
     background-image: url("/png/flabbyBirdMovingBackGround.gif");
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Ombre pour le canvas */
@@ -30,8 +31,17 @@ body {
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-    width: 300px;
     text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 640px;
+    width: 360px;
+    background-image: url("/png/flabbyBirdMovingBackGround.gif");
+    filter: grayscale(0%); /* Pour changer le theme en noir et blanc*/
+    background-size: cover;
+    border: 5px solid black;
+
 }
 
 #menu h1 {
@@ -43,6 +53,7 @@ body {
 /* Styles communs pour les éléments de sélection et les boutons dans le menu */
 #menu select,
 #menu button {
+
     font-size: 18px;
     padding: 10px;
     margin: 10px 0;
@@ -75,6 +86,8 @@ body {
     width: 320px;
     text-align: center;
     z-index: 10; /* Assurez-vous qu'il est toujours visible */
+    filter: grayscale(0%); /* Pour changer le theme en noir et blanc*/
+
 }
 
 #leaderboard h2 {
@@ -125,3 +138,33 @@ button {
 button:hover {
     background-color: #45a049; /* Couleur plus sombre au survol */
 }
+
+.page-option{
+    filter: grayscale(0%); /* Pour changer le theme en noir et blanc*/
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgb(190, 220, 143);
+    color: black;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    width: 250px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 15px;
+}
+.buttonOption-SelectionOption{
+    font-size: 18px;
+    padding: 10px;
+    margin: 10px;
+    cursor: pointer;
+    background-color: #4CAF50; /* Vert */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease;}

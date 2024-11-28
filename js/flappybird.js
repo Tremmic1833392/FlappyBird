@@ -7,12 +7,19 @@ let context;
 // Difficulter du jeux
 let gameDifficulty;
 
+// Theme choisit
+let themeChoix
+document.getElementById("theme").addEventListener("change", choixDuTheme);
+
+
+
 //bird
 let birdWidth = 34;
 let birdHeight = 24;
 let birdX = boardWidth / 8; // Largeur pour qu'il soit au début
 let birdY = boardHeight / 2; // Hauter pour qu'il soit au milieu
-let birdImg; // Image du bird
+let birdImg = new Image();
+birdImg.src = "png/flappybird.png";
 
 let bird = { // Creation du bird plus "constructeur"
     x: birdX,
@@ -28,12 +35,15 @@ let pipeHeight = 512;
 let pipeX = boardWidth;
 let pipeY = 0;
 
-let topPipeImg;
-let bottomPipeImg;
+let topPipeImg = new Image();
+topPipeImg.src = "png/toppipe.png";
+
+let bottomPipeImg = new Image();
+bottomPipeImg.src = "png/bottompipe.png";
 
 //physics de base
 let velocityX = -2; //pipes moving left speed
-let gravity = 0.4;
+let gravity = 0.4;  // gravité
 let velocityY = 0; //bird jump speed
 
 let gameOver = false;
@@ -43,29 +53,12 @@ let score = 0;
 let leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [];
 let scoreSaved = false; // Nouveau : empêche les prompts en boucle
 
-function modificationDesParametre(difficulty) {
-    switch (difficulty) {
-        case 'easy':
-            velocityX = -2;
-            gravity = 0.4;
-            velocityY = 0;
-            break;
-        case 'medium':
-            velocityX = -4;
-            gravity = 0.2;
-            velocityY = -4;
-            break;
-        case 'hard':
-            velocityX = -10;
-            gravity = 0.6;
-            velocityY = -8;
-            break;
-    }
-}
 
 function startGame() {
     document.getElementById('menu').style.display = 'none';
     document.getElementById('board').style.display = 'block';
+
+    restartGame();
 
     // Récupérer la difficulté sélectionnée
     gameDifficulty = document.getElementById('difficulty').value;
@@ -73,25 +66,22 @@ function startGame() {
     // Setter la difficulé
     modificationDesParametre(gameDifficulty);
 
+    // Load theme
+    loadTheme(themeChoix);
+
     board = document.getElementById("board");
     board.height = boardHeight;
     board.width = boardWidth;
     context = board.getContext("2d");
 
-    birdImg = new Image();
-    birdImg.src = "/png/flappybird.png";
+
     birdImg.onload = function () {
         context.drawImage(birdImg, bird.x, bird.y, bird.width, bird.height);
     }
 
-    topPipeImg = new Image();
-    topPipeImg.src = "png/toppipe.png";
-
-    bottomPipeImg = new Image();
-    bottomPipeImg.src = "png/bottompipe.png";
 
     requestAnimationFrame(update);
-    setInterval(placePipes, 1500);
+    setInterval(placePipes, 1500); // 1500 = 1.5 seconde --> un tuyaux tous les 1.5 sec
     document.addEventListener("keydown", moveBird);
 }
 
@@ -196,10 +186,14 @@ function detectCollision(a, b) {
 // leaderboard
 function saveScore(score) {
     if (scoreSaved) return; // Empêche d'exécuter plusieurs fois la sauvegarde
-
     let playerName = prompt("Entrez votre nom pour le leaderboard :");
 
-    if (playerName) {
+    // Si le joueur n'entre pas de nom et clique sur ok ou annuler il relance le jeu
+    if (playerName === null || playerName.trim() === "") {
+        restartGame();
+    }
+
+    else if (playerName) {
         let replaced = false;
 
         // Parcourir le leaderboard en commençant par la 10ème position
@@ -229,8 +223,6 @@ function saveScore(score) {
     }
 }
 
-
-
 function returnToMenu() {
     window.location.reload();
 }
@@ -249,14 +241,113 @@ function displayLeaderboard() {
     leaderboardDiv.style.display = 'block'; // Afficher le leaderboard
 }
 
+// Méthode pour afficher le menu option quand on appuit sur le button
+function displayOption(){
+    const optionMenu = document.getElementById('optionMenu');
+    const buttonStart = document.getElementById('buttonStart');
+    const buttonSelection = document.getElementById('difficulty');
+    const buttonClassement = document.getElementById('buttonLeaderboard');
+
+    buttonStart.style.display = 'none';        // Cache le button start,selection et le classement
+    buttonSelection.style.display = 'none';
+    buttonClassement.style.display = 'none';
+
+    optionMenu.style.display = 'block';        // Fait apparaitre le menu option
+}
+
+// Équivalent du returnToMenu, mais qui ne fais pas perdre les donner pour le theme
+function optionToMenu(){
+    const menu = document.getElementById('menu');
+    const optionMenu = document.getElementById('optionMenu');
+    const buttonStart = document.getElementById('buttonStart');
+    const buttonSelection = document.getElementById('difficulty');
+    const buttonClassement = document.getElementById('buttonLeaderboard');
+
+
+    buttonStart.style.display = 'flex';
+    buttonSelection.style.display = 'flex';
+    buttonClassement.style.display = 'flex';
+
+    optionMenu.style.display = 'none';
+}
 
 function restartGame() {
     document.getElementById('leaderboard').style.display = 'none';
     document.getElementById('board').style.display = 'block';
 
+    velocityX = -2; //pipes moving left speed
+    gravity = 0.4;  // gravité
+    velocityY = 0; //bird jump speed
     gameOver = false;
     bird.y = birdY;
     pipeArray = [];
     score = 0;
     scoreSaved = false;
+}
+
+// Modifie les parametre de vitesse saut et gravité selon la difficulter choisit
+function modificationDesParametre(difficulty) {
+    switch (difficulty) {
+        case 'easy':
+            velocityX = -2;
+            gravity = 0.4;
+            velocityY = 0;
+            break;
+        case 'medium':
+            velocityX = -4;
+            gravity = 0.2;
+            velocityY = -4;
+            break;
+        case 'hard':
+            velocityX = -10;
+            gravity = 0.6;
+            velocityY = -8;
+            break;
+    }
+}
+
+// Change les tuyaux et le flappy bird tout dépendant du theme que l'utilisateur à choisit
+function loadTheme(){
+    switch(themeChoix) {
+        case "themeNormal":
+            birdImg.src = "/png/flappybird.png";
+            topPipeImg.src = "/png/toppipe.png";
+            bottomPipeImg.src = "/png/bottompipe.png";
+            break;
+        case "themeRouge":
+            birdImg.src = "/png/redflappybird.png";
+            topPipeImg.src = "/png/toppipered.png";
+            bottomPipeImg.src = "/png/bottompipered.png";
+            break;
+        case "themeMauve":
+            birdImg.src = "/png/purpleflappybird.png";
+            topPipeImg.src = "/png/toppipepurple.png";
+            bottomPipeImg.src = "/png/bottompipepurple.png";
+            break;
+        case "themeNoirEtBlanc":
+            birdImg.src = "/png/blackandwhiteflappybird.png";
+            topPipeImg.src = "/png/blackandwhitetoppipe.png";
+            bottomPipeImg.src = "/png/blackandwhitebottompipe.png";
+
+            break;
+    }
+}
+
+// Recupere la valeur du theme dans le selector, puis si c'est le theme noir et blanc on met les tout affichage en noir et blanc
+function choixDuTheme() {
+    // Récupérer la valeur du thème sélectionné
+    themeChoix = document.getElementById("theme").value;
+    console.log("Thème choisi :", themeChoix); // Afficher le thème pour vérification
+
+    if(themeChoix === "themeNoirEtBlanc"){
+        document.getElementById("menu").style.filter = "grayscale(100%)"
+        document.getElementById("optionMenu").style.filter = "grayscale(100%)"
+        document.getElementById("board").style.filter = "grayscale(100%)"
+    }
+    // Si l'utilisateur retourne sur le theme rouge,normal ou mauve on rajuste les couleurs
+    else if (themeChoix === "themeRouge" || themeChoix === "themeNormal" || themeChoix === "themeMauve") {
+        document.getElementById("menu").style.filter = "grayscale(0%)"
+        document.getElementById("optionMenu").style.filter = "grayscale(0%)"
+        document.getElementById("board").style.filter = "grayscale(0%)"
+    }
 }
