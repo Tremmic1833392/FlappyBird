@@ -66,6 +66,40 @@ let leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [];
 let scoreSaved = false; // Nouveau : empêche les prompts en boucle
 
 
+
+// Chargement des sons
+const flapSound = new Audio('sounds/flap.mp3');
+const hitSound = new Audio('sounds/hit-sound.mp3');
+const pointSound = new Audio('sounds/point.mp3');
+const dieSound  = new Audio('sounds/die.mp3');
+
+
+
+let isMuted = false; // État initial du son (non muet)
+
+
+// Gestion du bouton Muet
+document.getElementById('mute-button').addEventListener('click', () => {
+    isMuted = !isMuted; // Basculer l'état muet/non muet
+    if (isMuted) {
+        flapSound.muted = true;
+        hitSound.muted = true;
+        pointSound.muted = true;
+        document.getElementById('mute-button').textContent = '🔇'; // Changer l'icône du bouton
+    } else {
+        flapSound.muted = false;
+        hitSound.muted = false;
+        pointSound.muted = false;
+        document.getElementById('mute-button').textContent = '🔊'; // Changer l'icône du bouton
+    }
+});
+window.addEventListener('click', function() {
+    // Activer les sons après un clic
+    flapSound.play();
+});
+
+
+
 function startGame() {
     document.getElementById('menu').style.display = 'none';
     document.getElementById('board').style.display = 'block';
@@ -104,7 +138,9 @@ function update() {
     if (gameOver) {
         if (!scoreSaved) {
             saveScore(score); // Sauvegarde le score une seule fois
-            scoreSaved = true; // Empêche le prompt de se répéter
+            scoreSaved = true;// Empêche le prompt de se répéter
+            if (!isMuted) {
+                dieSound.play(); }// Jouer le son de defaite
         }
         context.fillText("GAME OVER", 45, 320);
         return;
@@ -134,7 +170,12 @@ function update() {
 
         if (detectCollision(bird, pipe)) {
             gameOver = true;
+            if (!isMuted) {
+                hitSound.play(); }// Jouer le son de collision
         }
+
+
+
     }
 
     //clear pipes
@@ -160,6 +201,11 @@ function update() {
             coins.splice(i, 1); // Supprimez la pièce du tableau
             playerMoney += 5;  // Augmentez les gains
             i--; // Ajustez l'index après suppression
+            if (!isMuted) {
+                pointSound.currentTime = 0; // Réinitialiser le son au début
+                pointSound.play();          // Jouer le son du point
+            }
+
         }
     }
     // Supprimer les pièces hors écran
@@ -202,6 +248,13 @@ function placePipes() {
 function moveBird(e) {
     if (e.code === "Space" || e.code === "ArrowUp" || e.code === "KeyX") {
         velocityY = -6;
+
+
+        if (!isMuted) {
+            flapSound.currentTime = 0; // Réinitialiser le son au début
+            flapSound.play();         // Jouer le son du saut
+        }
+
         //bird.y = Math.max(bird.y - 10, 0);
 
         if (gameOver && (e.code === "Space" || e.code === "KeyX")) {
@@ -335,6 +388,8 @@ function placeCoin() {
         height: coinHeight
     };
     coins.push(coin);
+
+
 }
 
 // Modifie les parametre de vitesse saut et gravité selon la difficulter choisit
@@ -403,3 +458,10 @@ function choixDuTheme() {
         document.getElementById("board").style.filter = "grayscale(0%)"
     }
 }
+
+
+
+
+
+
+
