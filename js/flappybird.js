@@ -13,7 +13,7 @@ let playerMoney = 0; // Initialiser l'argent du joueur
 let gameDifficulty;
 
 //bird
-let birdWidth = 34; //width/height ratio = 408/228 = 17/12
+let birdWidth = 34;
 let birdHeight = 24;
 let birdX = boardWidth / 8; // Largeur pour qu'il soit au début
 let birdY = boardHeight / 2; // Hauter pour qu'il soit au milieu
@@ -28,7 +28,7 @@ let bird = { // Creation du bird plus "constructeur"
 
 //pipes
 let pipeArray = [];
-let pipeWidth = 64; //width/height ratio = 384/3072 = 1/8
+let pipeWidth = 64;
 let pipeHeight = 512;
 let pipeX = boardWidth;
 let pipeY = 0;

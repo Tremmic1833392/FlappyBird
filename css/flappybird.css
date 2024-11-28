@@ -1,4 +1,5 @@
 /* Corps de la page */
+/* Style global du body */
 body {
     font-family: 'Courier New', Courier, monospace;
     text-align: center;
@@ -7,7 +8,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #87CEEB; /* Bleu clair pour un fond agrÃ©able */
+    background-color: #87CEEB; /* Bleu clair pour un fond agréable */
     color: white; /* Texte blanc pour le contraste */
 }
 
@@ -39,6 +40,7 @@ body {
     text-decoration: underline;
 }
 
+/* Styles communs pour les éléments de sélection et les boutons dans le menu */
 #menu select,
 #menu button {
     font-size: 18px;
@@ -53,6 +55,7 @@ body {
     transition: background-color 0.3s ease;
 }
 
+/* Changement de couleur au survol pour les boutons et les éléments select dans le menu */
 #menu button:hover,
 #menu select:hover {
     background-color: #45a049; /* Couleur plus sombre au survol */
@@ -98,7 +101,7 @@ button {
     padding: 8px 12px;
     margin: 5px;
     cursor: pointer;
-    background-color: #4CAF50; /* Vert */
+    background-color: #4CAF50;
     color: white;
     border: none;
     border-radius: 5px;
@@ -106,7 +109,19 @@ button {
     transition: background-color 0.3s ease;
 }
 
-button:hover {
-    background-color: #45a049;
+/* Bouton option */
+.option-button {
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: url("/png/settingIcon.jpg") no-repeat center center;
+    background-size: cover;
+    position: absolute;
+    top: 5px;       /* positionnnement en haut */
+    right: 5px;     /*possitionnement a droite */
 }
 
+/* Effet au survol pour les boutons universels */
+button:hover {
+    background-color: #45a049; /* Couleur plus sombre au survol */
+}
