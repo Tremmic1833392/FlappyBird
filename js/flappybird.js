@@ -1,8 +1,13 @@
 //board
+let coins = []; // Stockage des pièces
+let coinImg;    // Image de la pièce
+let coinWidth = 20;
+let coinHeight = 20;
 let board;
 let boardWidth = 360;  // Largeur du background
 let boardHeight = 640; // Hauteur du background
 let context;
+let playerMoney = 0; // Initialiser l'argent du joueur
 
 // Difficulter du jeux
 let gameDifficulty;
@@ -93,6 +98,10 @@ function startGame() {
     requestAnimationFrame(update);
     setInterval(placePipes, 1500);
     document.addEventListener("keydown", moveBird);
+    coinImg = new Image();
+    coinImg.src = "png/Coin.png.png";
+    setInterval(placeCoin, 2000); // Génère une pièce toutes les 2 secondes
+
 }
 
 function update() {
@@ -108,8 +117,10 @@ function update() {
     context.clearRect(0, 0, board.width, board.height);
 
     //bird
-    velocityY += gravity;
-    bird.y = Math.max(bird.y + velocityY, 0);
+    if (gameStarted) {
+        velocityY += gravity;
+        bird.y = Math.max(bird.y + velocityY, 0);
+    }
     context.drawImage(birdImg, bird.x, bird.y, bird.width, bird.height);
 
     if (bird.y > board.height) {
@@ -124,6 +135,7 @@ function update() {
 
         if (!pipe.passed && bird.x > pipe.x + pipe.width) {
             score += 0.5;
+            playerMoney += 10;
             pipe.passed = true;
         }
 
@@ -141,6 +153,27 @@ function update() {
     context.fillStyle = "white";
     context.font = "45px sans-serif";
     context.fillText(score, 5, 45);
+    context.fillText("Gain: ", 5, 90); // Affichage du gain
+    context.fillText(playerMoney, 120, 90); // Affiche la valeur de l'argent du joueur
+    // Coins
+    for (let i = 0; i < coins.length; i++) {
+        let coin = coins[i];
+        coin.x += velocityX; // La pièce se déplace à gauche
+        context.drawImage(coinImg, coin.x, coin.y, coin.width, coin.height);
+
+        // Vérifiez si l'oiseau a touché la pièce
+        if (detectCollision(bird, coin)) {
+            coins.splice(i, 1); // Supprimez la pièce du tableau
+            playerMoney += 5;  // Augmentez les gains
+            i--; // Ajustez l'index après suppression
+        }
+    }
+
+// Supprimer les pièces hors écran
+    while (coins.length > 0 && coins[0].x < -coinWidth) {
+        coins.shift();
+    }
+
 }
 
 function placePipes() {
@@ -173,17 +206,21 @@ function placePipes() {
 }
 
 function moveBird(e) {
-    if (e.code == "Space" || e.code == "ArrowUp" || e.code == "KeyX") {
+    if (e.code === "ArrowUp" )/*|| e.code === "ArrowUp" || e.code === "KeyX") {
         velocityY = -6;
-
-        if (gameOver) {
+*/
+    {bird.y = Math.max(bird.y - 10, 0);}
+    else if (e.code==="ArrowDown")
+    {bird.y = Math.min(bird.y + 10, boardHeight - bird.height);}
+        if (gameOver && (e.code === "Space" || e.code === "KeyX")) {
             bird.y = birdY;
             pipeArray = [];
             score = 0;
             gameOver = false;
             scoreSaved = false; // Réinitialiser l'indicateur
+
         }
-    }
+
 }
 
 function detectCollision(a, b) {
@@ -259,4 +296,17 @@ function restartGame() {
     pipeArray = [];
     score = 0;
     scoreSaved = false;
+}
+let gameStarted = false;
+function placeCoin() {
+    if (gameOver) return;
+
+    let randomY = Math.random() * (boardHeight - coinHeight); // Position Y aléatoire
+    let coin = {
+        x: boardWidth, // Toujours à l'extérieur à droite du board
+        y: randomY,
+        width: coinWidth,
+        height: coinHeight
+    };
+    coins.push(coin);
 }
