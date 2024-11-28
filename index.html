@@ -26,6 +26,7 @@
             padding: 20px;
             border-radius: 10px;
             background-image: url("/png/flabbyBirdMovingBackGround.gif");
+            filter: grayscale(100%);
             background-size: cover;
             border: 5px solid black;
         }
@@ -38,10 +39,11 @@
         }
     </style>
 </head>
+
 <body>
 <div id="menu">
     <div>
-        <h1>Choisir la difficulté</h1>
+        <h1>FLAPPY-BIRD</h1>
         <select id="difficulty">
             <option value="easy">Facile</option>
             <option value="medium">Moyen</option>
@@ -51,6 +53,7 @@
         <button onclick="startGame()">Démarrer le jeu</button>
         <br>
         <button onclick="displayLeaderboard()">Voir le classement</button> <!-- Nouveau bouton -->
+        <button class="option-button" onclick="null"></button>
     </div>
 </div>
 
