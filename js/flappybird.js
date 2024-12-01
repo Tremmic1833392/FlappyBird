@@ -104,8 +104,6 @@ function startGame() {
     document.getElementById('menu').style.display = 'none';
     document.getElementById('board').style.display = 'block';
 
-    restartGame();
-
     // Récupérer la difficulté sélectionnée
     gameDifficulty = document.getElementById('difficulty').value;
 
@@ -125,6 +123,7 @@ function startGame() {
         context.drawImage(birdImg, bird.x, bird.y, bird.width, bird.height);
     }
 
+    restartGame(); // Démarrer avec la configuration initiale
 
     requestAnimationFrame(update);
     setInterval(placePipes, 1500); // 1500 = 1.5 seconde --> un tuyaux tous les 1.5 sec
@@ -246,6 +245,13 @@ function placePipes() {
 }
 
 function moveBird(e) {
+    // Vérifie si le leaderboard est affiché
+    const leaderboardVisible = document.getElementById('leaderboard').style.display === 'block';
+
+    if (leaderboardVisible) {
+        return; // Ne rien faire si le leaderboard est visible
+    }
+
     if (e.code === "Space" || e.code === "ArrowUp" || e.code === "KeyX") {
         velocityY = -6;
 
@@ -279,28 +285,34 @@ function detectCollision(a, b) {
 // leaderboard
 function saveScore(score) {
     if (scoreSaved) return; // Empêche d'exécuter plusieurs fois la sauvegarde
-    let playerName = prompt("Entrez votre nom pour le leaderboard :");
 
-    // Si le joueur n'entre pas de nom et clique sur ok ou annuler il relance le jeu
-    if (playerName === null || playerName.trim() === "") {
-        restartGame();
-    }
+    // Utilisation de setTimeout pour garantir l'affichage du prompt
+    setTimeout(() => {
+        let playerName = prompt("Entrez votre nom pour le leaderboard :");
 
-    else if (playerName) {
+        // Si le joueur annule ou ne saisit pas de nom
+        if (!playerName || playerName.trim() === "") {
+            restartGame(); // Retourner directement au jeu
+            return;
+        }
+
         let replaced = false;
 
-        // Parcourir le leaderboard en commençant par la 10ème position
+        // Ajouter la difficulté traduite
+        const difficultyInFrench = translateDifficulty(gameDifficulty);
+
+        // Parcourir le leaderboard pour insérer le nouveau score
         for (let i = leaderboard.length - 1; i >= 0; i--) {
             if (score > leaderboard[i].score) {
-                leaderboard[i] = { name: playerName, score: score }; // Remplacer score et nom
+                leaderboard[i] = { name: `${difficultyInFrench} ${playerName}`, score: score }; // Remplacer score et nom
                 replaced = true;
                 break; // Arrêter la boucle une fois remplacé
             }
         }
 
-        // Si le leaderboard contient moins de 10 scores, ajouter directement
+        // Ajouter le score si le leaderboard contient moins de 10 entrées
         if (!replaced && leaderboard.length < 10) {
-            leaderboard.push({ name: playerName, score: score });
+            leaderboard.push({ name: `${difficultyInFrench} ${playerName}`, score: score });
         }
 
         // Trier les scores du meilleur au moins bon
@@ -313,7 +325,7 @@ function saveScore(score) {
         displayLeaderboard();
 
         scoreSaved = true; // Empêche les prompts multiples
-    }
+    }, 10); // Légère pause pour éviter les conflits
 }
 
 function returnToMenu() {
@@ -368,6 +380,9 @@ function restartGame() {
     document.getElementById('leaderboard').style.display = 'none';
     document.getElementById('board').style.display = 'block';
 
+    // Réinitialiser les paramètres en fonction de la difficulté actuelle
+    modificationDesParametre(gameDifficulty);
+
     velocityX = -2; //pipes moving left speed
     gravity = 0.4;  // gravité
     velocityY = 0; //bird jump speed
@@ -397,18 +412,18 @@ function modificationDesParametre(difficulty) {
     switch (difficulty) {
         case 'easy':
             velocityX = -2;
-            gravity = 0.4;
+            gravity = 0.3;
             velocityY = 0;
             break;
         case 'medium':
-            velocityX = -4;
-            gravity = 0.2;
-            velocityY = -4;
+            velocityX = -3;
+            gravity = 0.3;
+            velocityY = 0;
             break;
         case 'hard':
-            velocityX = -10;
-            gravity = 0.6;
-            velocityY = -8;
+            velocityX = -5;
+            gravity = 0.3;
+            velocityY = 0;
             break;
     }
 }
@@ -458,7 +473,18 @@ function choixDuTheme() {
         document.getElementById("board").style.filter = "grayscale(0%)"
     }
 }
-
+function translateDifficulty(difficulty) {
+    switch (difficulty) {
+        case 'easy':
+            return 'Facile   ';
+        case 'medium':
+            return 'Moyen    ';
+        case 'hard':
+            return 'Difficile';
+        default:
+            return 'Facile   ';
+    }
+}
 
 
 
