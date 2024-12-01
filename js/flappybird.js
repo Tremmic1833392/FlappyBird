@@ -123,7 +123,7 @@ function startGame() {
         context.drawImage(birdImg, bird.x, bird.y, bird.width, bird.height);
     }
 
-    restartGame(); // Démarrer avec la configuration initiale
+    //restartGame(); // Démarrer avec la configuration initiale
 
     requestAnimationFrame(update);
     setInterval(placePipes, 1500); // 1500 = 1.5 seconde --> un tuyaux tous les 1.5 sec
@@ -172,8 +172,6 @@ function update() {
             if (!isMuted) {
                 hitSound.play(); }// Jouer le son de collision
         }
-
-
 
     }
 
@@ -380,17 +378,20 @@ function restartGame() {
     document.getElementById('leaderboard').style.display = 'none';
     document.getElementById('board').style.display = 'block';
 
-    // Réinitialiser les paramètres en fonction de la difficulté actuelle
+    // Récupérer la difficulté sélectionnée
+    gameDifficulty = document.getElementById('difficulty').value;
+
+    console.log(gameDifficulty);
+    // Setter la difficulé
     modificationDesParametre(gameDifficulty);
 
-    velocityX = -2; //pipes moving left speed
-    gravity = 0.4;  // gravité
-    velocityY = 0; //bird jump speed
     gameOver = false;
     bird.y = birdY;
     pipeArray = [];
     score = 0;
     scoreSaved = false;
+
+
 }
 let gameStarted = false;
 function placeCoin() {
@@ -416,12 +417,12 @@ function modificationDesParametre(difficulty) {
             velocityY = 0;
             break;
         case 'medium':
-            velocityX = -3;
+            velocityX = -4;
             gravity = 0.3;
             velocityY = 0;
             break;
         case 'hard':
-            velocityX = -5;
+            velocityX = -8;
             gravity = 0.3;
             velocityY = 0;
             break;
