@@ -366,10 +366,9 @@ function optionToMenu(){
     const buttonClassement = document.getElementById('buttonLeaderboard');
 
 
-    buttonStart.style.display = 'flex';
-    buttonSelection.style.display = 'flex';
-    buttonClassement.style.display = 'flex';
-
+    buttonStart.style.display = 'inline-block'; // Affichage correct pour un bouton
+    buttonSelection.style.display = 'inline-block';
+    buttonClassement.style.display = 'inline-block';
     optionMenu.style.display = 'none';
 }
 

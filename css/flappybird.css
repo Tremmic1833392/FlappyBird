@@ -72,11 +72,26 @@ body {
     background-color: #45a049; /* Couleur plus sombre au survol */
 }
 
+#menu button, #menu select {
+    display: inline-block;
+    margin: 10px 5px;
+    vertical-align: middle;
+}
+
+#menu {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 640px;
+    width: 360px;
+}
+
 /* Leaderboard */
 #leaderboard {
     position: absolute;
     top: 50%;
-    left: 50%;
+    left: 48.85%;
     transform: translate(-50%, -50%);
     background-color: rgba(0, 0, 0, 0.9); /* Fond semi-transparent plus sombre */
     color: white;
