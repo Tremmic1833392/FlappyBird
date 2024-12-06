@@ -418,17 +418,17 @@ function modificationDesParametre(difficulty) {
     switch (difficulty) {
         case 'easy':
             velocityX = -2;
-            gravity = 0.3;
+            gravity = 0.2;
             velocityY = 0;
             break;
         case 'medium':
             velocityX = -4;
-            gravity = 0.3;
+            gravity = 0.2;
             velocityY = 0;
             break;
         case 'hard':
             velocityX = -8;
-            gravity = 0.3;
+            gravity = 0.2;
             velocityY = 0;
             break;
     }
