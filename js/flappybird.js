@@ -93,12 +93,6 @@ document.getElementById('mute-button').addEventListener('click', () => {
         document.getElementById('mute-button').textContent = '🔊'; // Changer l'icône du bouton
     }
 });
-window.addEventListener('click', function() {
-    // Activer les sons après un clic
-    flapSound.play();
-});
-
-
 
 function startGame() {
     document.getElementById('menu').style.display = 'none';
