@@ -18,6 +18,7 @@ body {
     background-image: url("/png/flabbyBirdMovingBackGround.gif");
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Ombre pour le canvas */
+    position: absolute;
 }
 
 /* Menu principal */
@@ -91,7 +92,7 @@ body {
 #leaderboard {
     position: absolute;
     top: 50%;
-    left: 48.85%;
+    left: 50%;
     transform: translate(-50%, -50%);
     background-color: rgba(0, 0, 0, 0.9); /* Fond semi-transparent plus sombre */
     color: white;
@@ -135,6 +136,7 @@ button {
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     transition: background-color 0.3s ease;
+
 }
 
 /* Bouton option */
@@ -183,3 +185,9 @@ button:hover {
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     transition: background-color 0.3s ease;}
+
+#mute-button{
+    z-index: 1;
+    position: relative;
+    left:240px
+}

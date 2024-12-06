@@ -74,30 +74,27 @@ const pointSound = new Audio('sounds/point.mp3');
 const dieSound  = new Audio('sounds/die.mp3');
 
 
-
-let isMuted = false; // État initial du son (non muet)
-
-
 // Gestion du bouton Muet
-document.addEventListener('keydown', (event) => {
-    if (event.key === 'm' || event.key === 'M') {
-        {
-            isMuted = !isMuted; // Basculer l'état muet/non muet
-            if (isMuted) {
-                flapSound.muted = true;
-                hitSound.muted = true;
-                pointSound.muted = true;
-                document.getElementById('mute-button').textContent = '🔇'; // Changer l'icône du bouton
-            } else {
-                flapSound.muted = false;
-                hitSound.muted = false;
-                pointSound.muted = false;
-                document.getElementById('mute-button').textContent = '🔊'; // Changer l'icône du bouton
-            }
-        }
+let isMuted = false;  // État initial du son (non muet)
 
+document.getElementById('mute-button').addEventListener('click', () => {
+    isMuted = !isMuted;
+    if (isMuted) {
+        flapSound.muted = true;
+        hitSound.muted = true;
+        pointSound.muted = true;
+        document.getElementById('mute-button').textContent = '🔇'; // Changer l'icône du bouton
+    } else {
+        flapSound.muted = false;
+        hitSound.muted = false;
+        pointSound.muted = false;
+        document.getElementById('mute-button').textContent = '🔊'; // Changer l'icône du bouton
     }
 });
+
+
+
+
 
 function startGame() {
     document.getElementById('menu').style.display = 'none';
