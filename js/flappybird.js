@@ -79,18 +79,23 @@ let isMuted = false; // État initial du son (non muet)
 
 
 // Gestion du bouton Muet
-document.getElementById('mute-button').addEventListener('click', () => {
-    isMuted = !isMuted; // Basculer l'état muet/non muet
-    if (isMuted) {
-        flapSound.muted = true;
-        hitSound.muted = true;
-        pointSound.muted = true;
-        document.getElementById('mute-button').textContent = '🔇'; // Changer l'icône du bouton
-    } else {
-        flapSound.muted = false;
-        hitSound.muted = false;
-        pointSound.muted = false;
-        document.getElementById('mute-button').textContent = '🔊'; // Changer l'icône du bouton
+document.addEventListener('keydown', (event) => {
+    if (event.key === 'm' || event.key === 'M') {
+        {
+            isMuted = !isMuted; // Basculer l'état muet/non muet
+            if (isMuted) {
+                flapSound.muted = true;
+                hitSound.muted = true;
+                pointSound.muted = true;
+                document.getElementById('mute-button').textContent = '🔇'; // Changer l'icône du bouton
+            } else {
+                flapSound.muted = false;
+                hitSound.muted = false;
+                pointSound.muted = false;
+                document.getElementById('mute-button').textContent = '🔊'; // Changer l'icône du bouton
+            }
+        }
+
     }
 });
 
@@ -407,17 +412,17 @@ function modificationDesParametre(difficulty) {
     switch (difficulty) {
         case 'easy':
             velocityX = -2;
-            gravity = 0.3;
+            gravity = 0.2;
             velocityY = 0;
             break;
         case 'medium':
             velocityX = -4;
-            gravity = 0.3;
+            gravity = 0.2;
             velocityY = 0;
             break;
         case 'hard':
             velocityX = -8;
-            gravity = 0.3;
+            gravity = 0.2;
             velocityY = 0;
             break;
     }
