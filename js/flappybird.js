@@ -90,6 +90,7 @@ document.getElementById('mute-button').addEventListener('click', () => {
         pointSound.muted = false;
         document.getElementById('mute-button').textContent = '🔊'; // Changer l'icône du bouton
     }
+
 });
 
 
@@ -117,6 +118,7 @@ function startGame() {
 
     birdImg.onload = function () {
         context.drawImage(birdImg, bird.x, bird.y, bird.width, bird.height);
+
     }
 
     //restartGame(); // Démarrer avec la configuration initiale
@@ -139,6 +141,7 @@ function update() {
         }
         context.fillText("GAME OVER", 45, 320);
         return;
+
     }
     context.clearRect(0, 0, board.width, board.height);
 
@@ -205,6 +208,7 @@ function update() {
     while (coins.length > 0 && coins[0].x < -coinWidth) {
         coins.shift();
     }
+
 }
 
 function placePipes() {
@@ -236,6 +240,7 @@ function placePipes() {
     espaceAudessus = topPipe.y + topPipe.height; // Le bas du tuyau supérieur
     espaceEnDessous = bottomPipe.y;
     pipeArray.push(bottomPipe);
+
 }
 
 function moveBird(e) {
@@ -266,6 +271,7 @@ function moveBird(e) {
 
         }
     }
+
 
 }
 
@@ -320,10 +326,12 @@ function saveScore(score) {
 
         scoreSaved = true; // Empêche les prompts multiples
     }, 10); // Légère pause pour éviter les conflits
+
 }
 
 function returnToMenu() {
     window.location.reload();
+
 }
 
 function displayLeaderboard() {
@@ -338,6 +346,7 @@ function displayLeaderboard() {
     });
 
     leaderboardDiv.style.display = 'block'; // Afficher le leaderboard
+
 }
 
 // Méthode pour afficher le menu option quand on appuit sur le button
@@ -352,6 +361,7 @@ function displayOption(){
     buttonClassement.style.display = 'none';
 
     optionMenu.style.display = 'block';        // Fait apparaitre le menu option
+
 }
 
 // Équivalent du returnToMenu, mais qui ne fais pas perdre les donner pour le theme
@@ -367,6 +377,7 @@ function optionToMenu(){
     buttonSelection.style.display = 'inline-block';
     buttonClassement.style.display = 'inline-block';
     optionMenu.style.display = 'none';
+
 }
 
 function restartGame() {
@@ -387,6 +398,7 @@ function restartGame() {
     scoreSaved = false;
 
 
+
 }
 let gameStarted = false;
 function placeCoin() {
@@ -399,7 +411,6 @@ function placeCoin() {
         height: coinHeight
     };
     coins.push(coin);
-
 
 }
 
@@ -422,6 +433,7 @@ function modificationDesParametre(difficulty) {
             velocityY = 0;
             break;
     }
+
 }
 
 // Change les tuyaux et le flappy bird tout dépendant du theme que l'utilisateur à choisit
@@ -449,6 +461,7 @@ function loadTheme(){
 
             break;
     }
+
 }
 
 // Recupere la valeur du theme dans le selector, puis si c'est le theme noir et blanc on met les tout affichage en noir et blanc
@@ -468,6 +481,7 @@ function choixDuTheme() {
         document.getElementById("optionMenu").style.filter = "grayscale(0%)"
         document.getElementById("board").style.filter = "grayscale(0%)"
     }
+
 }
 function translateDifficulty(difficulty) {
     switch (difficulty) {
@@ -479,6 +493,7 @@ function translateDifficulty(difficulty) {
             return 'Difficile';
         default:
             return 'Facile   ';
+
     }
 }
 
